@@ -1,132 +1,96 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../Context/AuthContext.jsx';
+import { useTheme } from '../Context/ThemeContext.jsx';
+import NotificationDropdown from './NotificationDropdown.jsx';
+import { Sun, Moon, LogOut, User as UserIcon, Settings, Layers, LogIn } from 'lucide-react';
 
-function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+export const Navbar = () => {
+  const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem('token'); // Check if user is logged in
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
   };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token'); // Clear token
-    navigate('/login'); // Redirect to login
-    setIsOpen(false); // Close mobile menu
-  };
-
-  const navLinks = [
-    { to: '/', label: 'Home' },
-    { to: '/students', label: 'Students' },
-    { to: '/listing', label: 'Listing' },
-    { to: '/projects', label: 'Projects' },
-    ...(isLoggedIn
-      ? [
-          { to: '/user-dashboard', label: 'Dashboard' },
-          { to: '#', label: 'Logout', onClick: handleLogout },
-        ]
-      : [{ to: '/login', label: 'Login' }]),
-    { to: '/contact', label: 'Contact' },
-  ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-gradient-to-r from-blue-800 via-indigo-900 to-purple-900 shadow-2xl z-50 transition-all duration-500">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex items-center">
-            <span className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-pink-300 tracking-tight animate-pulse">
-              Team-Up
-            </span>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-2">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.label}
-                to={link.to}
-                onClick={link.onClick}
-                className={({ isActive }) =>
-                  `relative text-white px-5 py-3 rounded-xl text-base font-semibold transition-all duration-300 hover:bg-indigo-700/50 hover:shadow-lg hover:scale-105 ${
-                    isActive && link.label !== 'Logout'
-                      ? 'bg-indigo-700/70 shadow-inner text-cyan-200'
-                      : ''
-                  } ${
-                    link.label === 'Logout'
-                      ? 'bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900'
-                      : ''
-                  } group`
-                }
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-cyan-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </NavLink>
-            ))}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleMenu}
-              className="text-white hover:text-cyan-200 focus:outline-none p-3 rounded-full hover:bg-indigo-700/50 transition-colors duration-300"
-              aria-label="Toggle menu"
-            >
-              <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {isOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
-          </div>
-        </div>
+    <div className="navbar bg-base-100 shadow-md sticky top-0 z-50 px-4 md:px-8 border-b border-border transition-colors duration-200">
+      <div className="navbar-start">
+        <Link to="/" className="text-xl font-bold flex items-center gap-2 text-primary">
+          <span className="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center">
+            <Layers size={18} />
+          </span>
+          <span className="font-extrabold tracking-tight">HackMatch</span>
+        </Link>
       </div>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-gradient-to-b from-indigo-900 to-blue-900 shadow-inner animate-slideDown">
-          <div className="px-3 pt-3 pb-4 space-y-2 sm:px-4">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.label}
-                to={link.to}
-                onClick={() => {
-                  setIsOpen(false);
-                  if (link.onClick) link.onClick();
-                }}
-                className={({ isActive }) =>
-                  `relative text-white block px-5 py-3 rounded-xl text-lg font-medium transition-all duration-300 hover:bg-indigo-700/60 hover:shadow-md hover:scale-105 ${
-                    isActive && link.label !== 'Logout'
-                      ? 'bg-indigo-700/80 text-cyan-200'
-                      : ''
-                  } ${
-                    link.label === 'Logout'
-                      ? 'bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900'
-                      : ''
-                  } group`
-                }
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-cyan-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </NavLink>
-            ))}
+      <div className="navbar-center hidden lg:flex">
+        {user && (
+          <ul className="menu menu-horizontal px-1 gap-2 font-medium">
+            <li><Link to="/dashboard">Dashboard</Link></li>
+            <li><Link to="/discover">Discover</Link></li>
+            <li><Link to="/teams">Teams</Link></li>
+            <li><Link to="/hackathons">Hackathons</Link></li>
+            <li><Link to="/projects">Projects</Link></li>
+          </ul>
+        )}
+      </div>
+
+      <div className="navbar-end gap-3">
+        {/* Theme Toggler */}
+        <button 
+          onClick={toggleTheme} 
+          className="btn btn-ghost btn-circle text-base-content/80 hover:text-base-content"
+          aria-label="Toggle Theme"
+        >
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
+
+        {user ? (
+          <>
+            {/* Notification Bell */}
+            <NotificationDropdown />
+
+            {/* User Dropdown */}
+            <div className="dropdown dropdown-end">
+              <div tabindex="0" role="button" className="btn btn-ghost btn-circle avatar border border-border">
+                <div className="w-10 rounded-full">
+                  <img 
+                    alt="User Avatar" 
+                    src={user.avatar || 'https://res.cloudinary.com/dgtyqhtor/image/upload/v1700000000/default-avatar.png'} 
+                    onError={(e) => {
+                      e.target.src = 'https://api.dicebear.com/7.x/initials/svg?seed=' + user.firstName;
+                    }}
+                  />
+                </div>
+              </div>
+              <ul tabindex="0" className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow border border-border">
+                <li className="px-4 py-2 font-semibold text-base-content border-b border-border mb-1">
+                  <p className="truncate text-xs text-base-content/60">Logged in as</p>
+                  <p className="truncate text-sm">{user.firstName} {user.lastName}</p>
+                </li>
+                <li><Link to="/profile"><UserIcon size={14} /> My Profile</Link></li>
+                <li><Link to="/settings"><Settings size={14} /> Account Settings</Link></li>
+                <div className="divider my-1"></div>
+                <li><button onClick={handleLogout} className="text-error"><LogOut size={14} /> Logout</button></li>
+              </ul>
+            </div>
+          </>
+        ) : (
+          <div className="flex gap-2">
+            <Link to="/login" className="btn btn-ghost btn-sm text-base-content/80 hover:text-base-content">
+              <LogIn size={16} className="mr-1" /> Login
+            </Link>
+            <Link to="/register" className="btn btn-primary btn-sm rounded-lg">
+              Sign Up
+            </Link>
           </div>
-        </div>
-      )}
-    </nav>
+        )}
+      </div>
+    </div>
   );
-}
+};
 
 export default Navbar;

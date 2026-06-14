@@ -1,115 +1,35 @@
 import React from 'react';
-import { FaInstagram, FaLinkedin, FaTwitter , FaYoutube , FaArrowUp } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { Layers, Github, Linkedin, Mail } from 'lucide-react';
 
-const Footer = () => {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
+export const Footer = () => {
   return (
-    <footer className="relative bg-black text-gray-300 pt-24 pb-14 px-6 overflow-hidden isolate">
-      {/* Glowing Ambient Effects */}
-      <div className="absolute inset-0 -z-10">
-        {/* <div className="absolute w-[600px] h-[600px] top-[-100px] left-[-100px] bg-gradient-to-br from-cyan-500/30 to-purple-600/30 blur-[120px] rounded-full animate-pulse" /> */}
-        {/* <div className="absolute w-[500px] h-[500px] bottom-[-100px] right-[-100px] bg-gradient-to-tr from-pink-500/20 to-yellow-300/20 blur-[100px] rounded-full animate-ping" /> */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent opacity-[0.04]" />
-      </div>
-
-      {/* Main Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 px-6 lg:px-0 relative z-10">
-        {/* Contact Info */}
-        <div className="relative p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md transition-all hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(6,182,212,0.15)] duration-500">
-          <h3 className="text-2xl font-bold text-white mb-3 tracking-widest">TEAM-UP</h3>
-          <p className="text-sm leading-relaxed">NH-24 GHAZIABD, DELHI-MEERUT EXPRESSWAY</p>
-          
+    <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded border-t border-border transition-colors duration-200 mt-auto">
+      <nav className="grid grid-flow-col gap-4">
+        <Link to="/about" className="link link-hover text-sm">About Us</Link>
+        <Link to="/contact" className="link link-hover text-sm">Contact</Link>
+        <Link to="/terms" className="link link-hover text-sm">Terms of Service</Link>
+        <Link to="/privacy" className="link link-hover text-sm">Privacy Policy</Link>
+      </nav>
+      <nav>
+        <div className="grid grid-flow-col gap-4">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+            <Github size={20} />
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+            <Linkedin size={20} />
+          </a>
+          <a href="mailto:support@hackmatch.app" className="hover:text-primary transition-colors">
+            <Mail size={20} />
+          </a>
         </div>
-
-        {/* Navigation */}
-        <div className="relative p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md transition-transform hover:scale-[1.03] duration-500">
-          <h4 className="text-xl font-semibold text-cyan-300 mb-3">Quick Links</h4>
-          <ul className="space-y-2 text-sm">
-            {["Home", "Students","Listing","Projects",   "Contact", "Login"].map((text, i) => (
-              <li key={i} className="relative group">
-                <Link to={text === "Home" ? "/" : `/${text.toLowerCase()}`} className="hover:text-cyan-400 transition-all duration-300">
-                  {text}
-                </Link>
-                <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-500"></span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Social Links */}
-        <div className="relative p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md transition-all hover:scale-[1.03] duration-500">
-          <h4 className="text-xl font-semibold text-pink-400 mb-3">Follow Us</h4>
-          <div className="flex gap-6 text-2xl">
-            {[{
-              href: "https://www.instagram.com/hitech_college_/",
-              icon: <FaInstagram />,
-              color: "text-pink-500"
-            }, {
-              href: "https://www.linkedin.com/company/hi-tech-institute-of-engineering-of-technology/",
-              icon: <FaLinkedin />,
-              color: "text-blue-400"
-            }, 
-            // {
-            //   href: "https://github.com/amangupta9454",
-            //   icon: <FaTwitter  />,
-            //   color: "text-blue-500"
-            // },
-             {
-              href: "https://www.youtube.com/@HiTechCollege",
-              icon: <FaYoutube  />,
-              color: "text-red-600"
-            }].map(({ href, icon, color }, i) => (
-              <a key={i} href={href} target="_blank" rel="noopener noreferrer"
-                className={`group relative hover:scale-125 transform transition-all duration-300 ${color}`}>
-                {icon}
-                <span className="absolute -inset-2 bg-current opacity-10 blur-lg rounded-full -z-10" />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Farmer CTA */}
-        <div className="relative p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md transition-transform hover:scale-[1.03] duration-500">
-          <h4 className="text-xl font-semibold text-green-400 mb-3">For Students</h4>
-          <p className="text-sm mb-4">Join our network to present your skill directly to company and get real-time Experience.</p>
-          <button onClick={scrollToTop}
-            className="group relative inline-flex items-center px-5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium rounded-full shadow-lg hover:shadow-cyan-500/20 transition-all duration-300">
-            <FaArrowUp className="mr-2 group-hover:animate-bounce" />
-            Back to Top
-            {/* <span className="absolute -inset-1.5 rounded-full bg-cyan-400 blur-[12px] opacity-30 group-hover:opacity-50 transition-all duration-300 -z-10"></span> */}
-          </button>
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div className="my-14 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-20 rounded-full" />
-
-      {/* Copyright */}
-      <div className="text-center text-lg text-white">
-        © {new Date().getFullYear()} <span className="text-white font-semibold hover:text-pink-600">TEAM-UP</span>. All rights reserved.
-        <br />
-        <span className="text-pink-800 font-bold hover:text-green-500">This Website belongs to HIET Ghaziabad</span>
-      </div>
-
-      {/* Developer Credits */}
-      <div className="mt-3 text-center text-sm">
-        <a href="https://www.linkedin.com/in/amangupta9454" target="_blank" rel="noopener noreferrer"
-          className="text-cyan-300 hover:underline transition">
-          Created by <span className="font-semibold bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 text-transparent bg-clip-text animate-[shine_12s_linear_infinite]">Code Veda</span>
-        </a>
-      </div>
-
-      {/* Custom Tailwind Keyframes
-      <style>{`
-        @keyframes shine {
-          0% { background-position: 0% }
-          100% { background-position: 200% }
-        }
-      `}</style> */}
+      </nav>
+      <aside className="flex flex-col items-center gap-1">
+        <p className="font-bold flex items-center gap-1.5 text-base-content/80">
+          <Layers size={16} className="text-primary" /> HackMatch
+        </p>
+        <p className="text-xs text-base-content/50">Copyright © {new Date().getFullYear()} - All rights reserved by HackMatch Ltd.</p>
+      </aside>
     </footer>
   );
 };
